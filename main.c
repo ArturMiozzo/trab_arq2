@@ -6,6 +6,7 @@ int main()
     //Para testar funcionalidades é mais útil desativar depois de usado, pois dá pra ver melhor os impactos
     criaArquivoDados();
 
+//    boot(); //inicializa interface
 
     OBJETO obj;
     obj = zeraObjeto(obj);

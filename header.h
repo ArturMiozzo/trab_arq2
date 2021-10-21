@@ -45,4 +45,9 @@ int salvaArquivo(OBJETO* objeto, char dados[], uint8_t ind_cluster_pasta);
 
 int salvaPasta(OBJETO* ptr_objeto, uint8_t ind_cluster_pasta);
 
+void boot();
+
+int mkfile(char *name, int folder);
+int mkdir(char *name, int folder);
+
 #endif // header

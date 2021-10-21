@@ -7,13 +7,13 @@
 #include <string.h>
 #include "struct.h"
 
-METADADOS zeraMetadados(METADADOS metadados);
+METADADOS zeraMetadados();
 
-INDICE zeraIndice(INDICE indice);
+INDICE zeraIndice();
 
-CLUSTER zeraCluster(CLUSTER cluster);
+CLUSTER zeraCluster();
 
-OBJETO zeraObjeto(OBJETO objeto);
+OBJETO zeraObjeto();
 
 void criaArquivoDados();
 
@@ -41,9 +41,21 @@ int buscaClusterLivre();
 
 int buscaNumeroClustersLivres();
 
-int salvaArquivo(OBJETO* objeto, char dados[], uint8_t ind_cluster_pasta);
+int salvaArquivo(OBJETO objeto, char dados[], uint8_t ind_cluster_pasta);
 
-int salvaPasta(OBJETO* ptr_objeto, uint8_t ind_cluster_pasta);
+int salvaPasta(OBJETO objeto, uint8_t ind_cluster_pasta);
+
+OBJETO criaInfoArquivo(char nome[], char extensao[]);
+
+OBJETO criaInfoPasta(char nome[]);
+
+OBJETO retornaObjetoDaPasta(char nome[], uint8_t ind_cluster_pasta);
+
+void apagaArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta);
+
+int modificaArquivo(OBJETO arquivo, char novos_dados[], uint8_t ind_cluster_pasta);
+
+//---------------------------------------------------------------------------------
 
 void boot();
 

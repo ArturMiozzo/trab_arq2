@@ -2,53 +2,56 @@
 
 int main()
 {
-    //Deve ser executado sÛ na primeira vez, do contr·rio ela ir· apagar o arquivo atual e criar um novo.
-    //Para testar funcionalidades È mais ˙til desativar depois de usado, pois d· pra ver melhor os impactos
-    criaArquivoDados();
+    //Deve ser executado s√≥ na primeira vez, do contr√°rio ela ir√° apagar o arquivo atual e criar um novo.
+    //Para testar funcionalidades √© mais √∫til desativar depois de usado, pois d√° pra ver melhor os impactos
+    //criaArquivoDados();
 
-//    boot(); //inicializa interface
 
     OBJETO obj;
     obj = zeraObjeto(obj);
-    strcpy(obj.nome, "Arquivo teste 1!");
-    strcpy(obj.extensao, ".txt");
+    obj = criaInfoArquivo("Arquivo teste 1!", ".txt");
     char dados[] = "Teste de arquivo que cabe em um unico cluster! :D";
 
     OBJETO obj2;
     obj2 = zeraObjeto(obj2);
-    strcpy(obj2.nome, "Arquivo teste 2!");
-    strcpy(obj2.extensao, ".txt");
-    char dados_2[32768];
+    obj2 = criaInfoArquivo("Arquivo teste 2!", ".txt");
+    char dados_2[50001];
 
     int i;
-    for(i = 0; i < 32768; i++){
+    for(i = 0; i < 50000; i++){
         dados_2[i] = '2';
     }
+    dados_2[50000] = '\0';
 
     OBJETO pst;
     pst = zeraObjeto(pst);
-    strcpy(pst.nome, "Exemplo de pasta");
-    strcpy(pst.extensao, "");
+    pst = criaInfoPasta("Pasta exemplo");
 
     //-----------------------------------------------------------------------
     //Exemplo de uso
 
-    salvaArquivo(&obj, dados, 0);
-    salvaArquivo(&obj2, dados_2, 0);
-    salvaPasta(&pst, 0);
-    salvaArquivo(&obj, dados, pst.cluster_inicial);
 
-    imprimePasta(0); //Root
-    imprimePasta(pst.cluster_inicial); //Conte˙do da pasta "exemplo de pasta" criada anteriormente.
+    /*
+    salvaArquivo(obj, dados, 0);
+    salvaArquivo(obj2, dados_2, 0);
+    salvaPasta(pst, 0);
+    salvaArquivo(obj, dados, retornaObjetoDaPasta(pst.nome, 0).cluster_inicial);*/
+
+
+    /*
+    obj = retornaObjetoDaPasta(obj.nome, 0);    //Pega a vers√£o atualizada do objeto, com informa√ß√µes atualizadas de cluster e tamanho
+    modificaArquivo(obj, dados_2, 0);*/
+
 
     return 0;
 }
 
-//O indice de uma pasta vazia guarda seu prÛprio valor. Para verificar se a pasta È vazia È necess·rio varrer o cluster
+//Fun√ß√£o que atualiza o tamanho da pasta
 
-//imprimePasta pode ter uma vers„o alternativa que n„o busque um espaÁo vazio, mas sim leia os objetos baseado no tamanho em bytes informado
 
-//MKFILE: salva o nome e a extens„o em um objeto; cria um vetor vazio e usa um sizeof dele para preencher o tamanho
 
-//FunÁ„o que salva arquivos e pastas dentro de uma pasta deve atualizr o tamanho da pasta que est· armazenando esss informaÁıes. Pasta de
-//tamanho 0 est· vazia. Se houverem itens, tamanho È igual ao n˙mero de bytes desses itens
+//O indice de uma pasta vazia guarda seu pr√≥prio valor. Para verificar se a pasta √© vazia √© necess√°rio varrer o cluster ou checar o tamanho dela em suas informa√ß√µes
+
+
+//Fun√ß√£o que salva arquivos e pastas dentro de uma pasta deve atualizr o tamanho da pasta que est√° armazenando esss informa√ß√µes. Pasta de
+//tamanho 0 est√° vazia. Se houverem itens, tamanho √© igual ao n√∫mero de bytes desses itens

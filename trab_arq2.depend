@@ -1,0 +1,38 @@
+# depslib dependency file v1.0
+1635026514 source:c:\users\artur\documents\arq2\trab_arq2\arquivos.c
+	"arquivos.h"
+
+1635024377 c:\users\artur\documents\arq2\trab_arq2\header.h
+	<stdio.h>
+	<math.h>
+	<stdint.h>
+	<stdbool.h>
+	<string.h>
+	"struct.h"
+
+1635023365 c:\users\artur\documents\arq2\trab_arq2\struct.h
+
+1635026543 source:c:\users\artur\documents\arq2\trab_arq2\main.c
+	"arquivos.h"
+	"interface.h"
+
+1635025754 source:c:\users\artur\documents\arq2\trab_arq2\interface.c
+	"comandos.h"
+
+1635026563 c:\users\artur\documents\arq2\trab_arq2\arquivos.h
+	<stdio.h>
+	<math.h>
+	<stdint.h>
+	<stdbool.h>
+	<string.h>
+	"struct.h"
+
+1635025829 source:c:\users\artur\documents\arq2\trab_arq2\comandos.c
+	"comandos.h"
+	"arquivos.h"
+
+1635027089 c:\users\artur\documents\arq2\trab_arq2\comandos.h
+	<string.h>
+
+1635025839 c:\users\artur\documents\arq2\trab_arq2\interface.h
+

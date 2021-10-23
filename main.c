@@ -1,4 +1,4 @@
-#include "header.h"
+#include "arquivos.h"
 #include "interface.h"
 
 int main()

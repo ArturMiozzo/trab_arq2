@@ -54,11 +54,21 @@ OBJETO zeraObjeto(){
     return objeto;
 }
 
-void criaArquivoDados(){
+void criaArquivoDados(int reset){
     //Cria o arquivo do sistema
+    //Não sobrescreve arquivo existente se reset for 0
 
     FILE* light_fs;
     int i;
+
+    light_fs = fopen(FILENAME, "rb");
+
+    if(light_fs!=NULL && reset==0)
+    {
+        return;
+    }
+
+    fclose(light_fs);
 
     METADADOS meta;
     meta = zeraMetadados();

@@ -15,7 +15,7 @@ CLUSTER zeraCluster();
 
 OBJETO zeraObjeto();
 
-void criaArquivoDados();
+void criaArquivoDados(int reset);
 
 CLUSTER leCluster(uint8_t num_cluster);
 

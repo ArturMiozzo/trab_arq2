@@ -46,7 +46,7 @@ int mkfile(char *name, int folder){
 
     strcpy(obj.extensao, ".txt");
     char dados[] = "";
-    salvaArquivo(&obj, dados, folder);
+    salvaArquivo(obj, dados, folder);
     return 1;
 }
 
@@ -64,6 +64,6 @@ int mkdir(char *name, int folder){
 
     strcpy(obj.extensao, "");
     char dados[] = "";
-    salvaArquivo(&obj, dados, folder);
+    salvaArquivo(obj, dados, folder);
     return 1;
 }

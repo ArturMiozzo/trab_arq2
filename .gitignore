@@ -50,3 +50,10 @@ modules.order
 Module.symvers
 Mkfile.old
 dkms.conf
+
+# Memory files
+*.bin
+
+# Code blocks projects
+*.cbp
+*.depend

@@ -17,7 +17,7 @@ void boot(){
 
         comando = strtok(arg, " ");
         args = strtok(NULL, " ");
-        arg1 = strtok(NULL, " ");
+        arg1 = strtok(NULL, "");
 
         if (args == NULL){
             args = "";
@@ -43,9 +43,14 @@ void boot(){
             if (!RENAME(args, curFolder)){
                 printf("ERRO MOVER ARQUIVO DA PASTA\n");
             }
+        }else if (strcmp(comando, "EDIT") == 0){
+            if (!edit(args, arg1, curFolder)){
+                printf("ERRO AO EDITAR ARQUIVO\n");
+            }
         }else if ((strcmp(comando, "shutdown") != 0) && (strcmp(args, "-s") != 0)){
             printf("COMANDO INVALIDO\n");
         }
+
         scanf("%*[^\n]"); scanf("%*c");
     }
 }

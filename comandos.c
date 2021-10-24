@@ -4,6 +4,7 @@
 int DIR(char *path, int folder)
 {
     imprimePasta(folder);
+    return 1;
 }
 
 int mkfile(char *name, int folder){

@@ -1,5 +1,6 @@
 #include "comandos.h"
 #include "interface.h"
+#include <stdio.h>
 
 //Funções de interface
 void boot(){

@@ -5,26 +5,39 @@
 void boot(){
     char comando[7] = "";
     char arg[100];
+    char *args;
     char *arg1;
-    char *arg2;
     int curFolder = 0;
 
-    while ((strcmp(comando, "shutdown") != 0) && (strcmp(arg1, "-s") != 0)) {
+    while ((strcmp(comando, "shutdown") != 0) && (strcmp(args, "-s") != 0)) {
+
         printf("C:\\>");
         scanf("%s %[^\n]",comando,arg);
 
-        arg1 = strtok(arg, " ");
-        arg2 = strtok(NULL, " ");
+        args = strtok(arg, " ");
+        arg1 = strtok(NULL, " ");
 
         if (strcmp(comando, "MKFILE") == 0){
-            if (!mkfile(arg1, curFolder)){
+            if (!mkfile(args, curFolder)){
                 printf("ERRO AO CRIAR ARQUIVO\n");
             }
         } else if (strcmp(comando, "MKDIR") == 0){
-            if (!mkdir(arg1, curFolder)){
+            if (!mkdir(args, curFolder)){
                 printf("ERRO AO CRIAR PASTA\n");
             }
-        }else if ((strcmp(comando, "shutdown") != 0) && (strcmp(arg1, "-s") != 0)){
+        }else if (strcmp(comando, "DIR") == 0){
+            if (!DIR(args, curFolder)){
+                printf("ERRO AO LER PASTA\n");
+            }
+        }else if (strcmp(comando, "MOVE") == 0){
+            if (!MOVE(args, curFolder)){
+                printf("ERRO MOVER ARQUIVO DA PASTA\n");
+            }
+        }else if (strcmp(comando, "RENAME") == 0){
+            if (!RENAME(args, curFolder)){
+                printf("ERRO MOVER ARQUIVO DA PASTA\n");
+            }
+        }else if ((strcmp(comando, "shutdown") != 0) && (strcmp(args, "-s") != 0)){
             printf("COMANDO INVALIDO\n");
         }
     }

@@ -31,9 +31,22 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="arquivos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="arquivos.h" />
+		<Unit filename="comandos.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="comandos.h" />
+		<Unit filename="interface.c">
+			<Option compilerVar="CC" />
+		</Unit>
+		<Unit filename="interface.h" />
 		<Unit filename="main.c">
 			<Option compilerVar="CC" />
 		</Unit>
+		<Unit filename="struct.h" />
 		<Extensions>
 			<lib_finder disable_auto="1" />
 		</Extensions>

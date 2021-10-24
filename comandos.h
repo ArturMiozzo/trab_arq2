@@ -2,7 +2,7 @@
 
 //declaração dos comandos
 
-int DIR(char *path, int folder);
+int DIR(int folder);
 
 int mkfile(char *name, int folder);
 

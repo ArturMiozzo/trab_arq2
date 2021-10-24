@@ -1,7 +1,7 @@
 # include "comandos.h"
 # include "arquivos.h"
 
-int DIR(char *path, int folder)
+int DIR(int folder)
 {
     imprimePasta(folder);
     return 1;
@@ -16,6 +16,10 @@ int mkfile(char *name, int folder){
 
     strcpy(originalName, name);
     index = strrchr(name,'.')-name;
+
+    if (index < 0){
+        return 0;
+    }
 
     strncpy(obj.nome, name, index);
     auxString = obj.nome;

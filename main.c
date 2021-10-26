@@ -2,8 +2,8 @@
 
 int main()
 {
-    //Deve ser executado só na primeira vez, do contrário ela irá apagar o arquivo atual e criar um novo.
-    //Para testar funcionalidades é mais útil desativar depois de usado, pois dá pra ver melhor os impactos
+    //Deve ser executado sÃ³ na primeira vez, do contrÃ¡rio ela irÃ¡ apagar o arquivo atual e criar um novo.
+    //Para testar funcionalidades Ã© mais Ãºtil desativar depois de usado, pois dÃ¡ pra ver melhor os impactos
     criaArquivoDados();
 
 
@@ -67,10 +67,10 @@ int main()
     salvaArquivo(obj, dados, caminho[2].cluster_inicial);                       //Salva um arquivo dentro da pasta
     atualizaTamanhoDasPastas(caminho, sizeof(caminho) / sizeof(caminho[0]));    //Atualiza o tamanho da pasta
 
-    apagaPastaVazia(pst2.nome, caminho[1].cluster_inicial);
+    //apagaPastaVazia(pst2.nome, caminho[1].cluster_inicial);
 
 
-    //Imprime o conteúdo das pastas
+    //Imprime o conteÃºdo das pastas
     imprimePasta(caminho[0].cluster_inicial);
     printf("\n");
     imprimePasta(caminho[1].cluster_inicial);
@@ -82,8 +82,8 @@ int main()
 }
 
 
-//Função que retorna o tamanho em disco ocupado por tudo dentro da pasta atual (total de clusters ocupados * tamanho de um cluster, inclui o cluster da pasta atual).
+//FunÃ§Ã£o que retorna o tamanho em disco ocupado por tudo dentro da pasta atual (total de clusters ocupados * tamanho de um cluster, inclui o cluster da pasta atual).
 
 
-//Função que salva arquivos e pastas dentro de uma pasta deve atualizr o tamanho da pasta que está armazenando esss informações. Pasta de
-//tamanho 0 está vazia. Se houverem itens, tamanho é igual ao número de bytes desses itens
+//FunÃ§Ã£o que salva arquivos e pastas dentro de uma pasta deve atualizr o tamanho da pasta que estÃ¡ armazenando esss informaÃ§Ãµes. Pasta de
+//tamanho 0 estÃ¡ vazia. Se houverem itens, tamanho Ã© igual ao nÃºmero de bytes desses itens

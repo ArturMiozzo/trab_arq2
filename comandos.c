@@ -89,6 +89,10 @@ int edit(char *name, char* newdata,int folder){
 
 int CD(char *args, int folder)
 {
+    int strsize = strlen(args);
+    if ((strsize > 3) && (args[strsize-4] == '.')){
+        return -1;
+    }
     int aux = retornaClusterCaminho(args, folder);
     if(aux>=0)
     {

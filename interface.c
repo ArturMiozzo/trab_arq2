@@ -55,22 +55,26 @@ void boot(){
                 printf("ERRO AO EDITAR ARQUIVO\n");
             }
         }else if (strcmp(comando, "CD") == 0){
-            if (strcmp(args,"..") == 0){
-                if (sizecaminho > 1){
-                    strcpy(strcaminho[sizecaminho-1],"");
-                    ncaminho[sizecaminho-1] = -1;
-                    sizecaminho--;
-                    curFolder = ncaminho[sizecaminho-1];
+            arg1 = strtok(args,"/");
+            while (arg1 != NULL ){
+                if (strcmp(arg1,"..") == 0){
+                    if (sizecaminho > 1){
+                        strcpy(strcaminho[sizecaminho-1],"");
+                        ncaminho[sizecaminho-1] = -1;
+                        sizecaminho--;
+                        curFolder = ncaminho[sizecaminho-1];
+                    }
+                }else{
+                    int aux = CD(arg1, curFolder);
+                    if(aux>=0)
+                    {
+                        sizecaminho++;
+                        strcpy(strcaminho[sizecaminho-1],arg1);
+                        ncaminho[sizecaminho-1] = aux;
+                        curFolder = aux;
+                    }
                 }
-            }else{
-                int aux = CD(args, curFolder);
-                if(aux>=0)
-                {
-                    sizecaminho++;
-                    strcpy(strcaminho[sizecaminho-1],args);
-                    ncaminho[sizecaminho-1] = aux;
-                    curFolder = aux;
-                }
+                arg1 = strtok(NULL,"/");
             }
         }else if ((strcmp(comando, "SHUTDOWN") != 0) && (strcmp(args, "-S") != 0)){
             printf("COMANDO INVALIDO\n");
@@ -84,10 +88,10 @@ void escreveCaminho(char caminho[MAX_FOLDER][MAX_FOLDER], int size){
     printf("%s",caminho[0]);
 
     for (int i = 1;i<size;i++){
-       printf("\\%s", caminho[i]);
+       printf("/%s", caminho[i]);
     }
     if(size == 1){
-        printf("\\");
+        printf("/");
     }
 
     printf(">");

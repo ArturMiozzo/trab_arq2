@@ -14,7 +14,7 @@ void boot(){
     char *arg1;
     int curFolder = 0;
 
-    strcpy(strcaminho[0],"C:");
+    strcpy(strcaminho[0],"root");
     ncaminho[0] = 0;
     while ((strcmp(comando, "SHUTDOWN") != 0) && (strcmp(args, "-S") != 0)) {
         escreveCaminho(strcaminho, sizecaminho);

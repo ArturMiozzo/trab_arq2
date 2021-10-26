@@ -15,7 +15,7 @@ CLUSTER zeraCluster();
 
 OBJETO zeraObjeto();
 
-void criaArquivoDados(int reset);
+void criaArquivoDados();
 
 CLUSTER leCluster(uint8_t num_cluster);
 
@@ -55,11 +55,14 @@ void apagaArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta);
 
 int modificaArquivo(OBJETO arquivo, char novos_dados[], uint8_t ind_cluster_pasta);
 
+int calculaTamanhoDaPasta(uint8_t ind_cluster_pasta);
+
+int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pasta);
+
+void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho);
+
+int apagaPastaVazia(char nome[], uint8_t ind_cluster_pasta);
+
 //---------------------------------------------------------------------------------
-
-void boot();
-
-int mkfile(char *name, int folder);
-int mkdir(char *name, int folder);
 
 #endif // header

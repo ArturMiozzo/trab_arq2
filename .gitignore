@@ -53,3 +53,6 @@ dkms.conf
 
 # Memory files
 *.bin
+
+# Code blocks files
+*.layout

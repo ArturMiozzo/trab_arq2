@@ -6,13 +6,14 @@
 //Funções de interface
 void boot(){
     char arg[100];
+    char caminho[100] = "root";
     char *comando;
     char *args;
     char *arg1;
     int curFolder = 0;
 
     while ((strcmp(comando, "shutdown") != 0) && (strcmp(args, "-s") != 0)) {
-        printf("C:\\>");
+        printf("\%s\>", caminho);
         scanf("%[^\n]",arg);
 
         comando = strtok(arg, " ");
@@ -46,6 +47,13 @@ void boot(){
         }else if (strcmp(comando, "EDIT") == 0){
             if (!edit(args, arg1, curFolder)){
                 printf("ERRO AO EDITAR ARQUIVO\n");
+            }
+        }else if (strcmp(comando, "CD") == 0){
+            int aux = CD(args, curFolder);
+            if(aux>=0)
+            {
+                strcpy(caminho, args);
+                curFolder = aux;
             }
         }else if ((strcmp(comando, "shutdown") != 0) && (strcmp(args, "-s") != 0)){
             printf("COMANDO INVALIDO\n");

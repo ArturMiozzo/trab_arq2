@@ -86,3 +86,13 @@ int edit(char *name, char* newdata,int folder){
     obj = retornaObjetoDaPasta(name, folder);
     return 1;
 }
+
+int CD(char *args, int folder)
+{
+    int aux = retornaClusterCaminho(args, folder);
+    if(aux>=0)
+    {
+        return aux;
+    }
+    return -1;
+}

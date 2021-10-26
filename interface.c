@@ -68,10 +68,19 @@ void boot(){
                     int aux = CD(arg1, curFolder);
                     if(aux>=0)
                     {
-                        sizecaminho++;
-                        strcpy(strcaminho[sizecaminho-1],arg1);
-                        ncaminho[sizecaminho-1] = aux;
-                        curFolder = aux;
+                        if (strcmp(arg1,"root")==0){
+                            for (int i = sizecaminho-1;i>0;i--){
+                                strcpy(strcaminho[i],"");
+                                ncaminho[i] = -1;
+                            }
+                            sizecaminho = 1;
+                            curFolder = 0;
+                        }else{
+                            sizecaminho++;
+                            strcpy(strcaminho[sizecaminho-1],arg1);
+                            ncaminho[sizecaminho-1] = aux;
+                            curFolder = aux;
+                        }
                     }
                 }
                 arg1 = strtok(NULL,"/");

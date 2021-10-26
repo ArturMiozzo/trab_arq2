@@ -1,11 +1,16 @@
-#include "header.h"
+#include "arquivos.h"
+#include "interface.h"
 
 int main()
 {
     //Deve ser executado só na primeira vez, do contrário ela irá apagar o arquivo atual e criar um novo.
     //Para testar funcionalidades é mais útil desativar depois de usado, pois dá pra ver melhor os impactos
-    criaArquivoDados();
+    criaArquivoDados(0);
 
+    //chamando interface e retornando sem executar chamadas de exemplo
+    boot();
+
+    return;
 
     OBJETO obj;
     obj = zeraObjeto(obj);

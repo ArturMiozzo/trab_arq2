@@ -12,7 +12,7 @@ void boot(){
     char *arg1;
     int curFolder = 0;
 
-    while ((strcmp(comando, "shutdown") != 0) && (strcmp(args, "-s") != 0)) {
+    while ((strcmp(comando, "SHUTDOWN") != 0) && (strcmp(args, "-S") != 0)) {
         printf("\%s\>", caminho);
         scanf("%[^\n]",arg);
 
@@ -23,6 +23,8 @@ void boot(){
         if (args == NULL){
             args = "";
         }
+
+        comando = strupr(comando);
 
         if (strcmp(comando, "MKFILE") == 0){
             if (!mkfile(args, curFolder)){
@@ -55,10 +57,10 @@ void boot(){
                 strcpy(caminho, args);
                 curFolder = aux;
             }
-        }else if ((strcmp(comando, "shutdown") != 0) && (strcmp(args, "-s") != 0)){
+        }else if ((strcmp(comando, "SHUTDOWN") != 0) && (strcmp(args, "-S") != 0)){
             printf("COMANDO INVALIDO\n");
         }
-
+        args = strupr(args);
         scanf("%*[^\n]"); scanf("%*c");
     }
 }

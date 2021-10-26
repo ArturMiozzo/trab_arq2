@@ -13,3 +13,5 @@ int MOVE(char *args, int folder);
 int RENAME(char *args, int folder);
 
 int edit(char *name, char* newdata,int folder);
+
+int CD(char *args, int folder);

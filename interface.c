@@ -6,14 +6,16 @@
 //Funções de interface
 void boot(){
     char arg[100];
-    char caminho[100] = "root";
+    char strcaminho[MAX_FOLDER][MAX_FOLDER];
+    int sizecaminho = 1;
     char *comando;
     char *args;
     char *arg1;
     int curFolder = 0;
 
+    strcpy(strcaminho[0],"C:");
     while ((strcmp(comando, "SHUTDOWN") != 0) && (strcmp(args, "-S") != 0)) {
-        printf("\%s\>", caminho);
+        escreveCaminho(strcaminho, sizecaminho);
         scanf("%[^\n]",arg);
 
         comando = strtok(arg, " ");
@@ -54,7 +56,8 @@ void boot(){
             int aux = CD(args, curFolder);
             if(aux>=0)
             {
-                strcpy(caminho, args);
+                sizecaminho++;
+                strcpy(strcaminho[sizecaminho-1],args);
                 curFolder = aux;
             }
         }else if ((strcmp(comando, "SHUTDOWN") != 0) && (strcmp(args, "-S") != 0)){
@@ -63,4 +66,17 @@ void boot(){
         args = strupr(args);
         scanf("%*[^\n]"); scanf("%*c");
     }
+}
+
+void escreveCaminho(char caminho[MAX_FOLDER][MAX_FOLDER], int size){
+    printf("%s",caminho[0]);
+
+    for (int i = 1;i<size;i++){
+       printf("\\%s", caminho[i]);
+    }
+    if(size == 1){
+        printf("\\");
+    }
+
+    printf(">");
 }

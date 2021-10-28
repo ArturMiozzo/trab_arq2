@@ -72,3 +72,7 @@ OBJETO retornaObjetoOcupandoCluster(uint8_t ind_cluster_buscado, uint8_t* ind_cl
 char* retornaDadosDoArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta);
 
 int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta);
+
+int calculaTamanhoReservadoDaPasta(uint8_t ind_cluster_pasta);
+
+int reorganizaClusters();

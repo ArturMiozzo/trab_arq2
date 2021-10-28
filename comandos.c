@@ -276,8 +276,17 @@ int disk(char *path, OBJETO caminho[255], int cur){
         return 0;
     }
     printf("\nTotal utilizado: %i\n",size);
+    return 1;
 }
 
 int defrag(char *path, OBJETO caminho[255], int cur){
-    return 0;
+    int count;
+
+    count = reorganizaClusters();
+
+    if(count == 0){
+        return 0;
+    }
+    printf("\nUnidades movidas: %i\n",count);
+    return 1;
 }

@@ -86,7 +86,7 @@ void boot(){
             }
         }else if (strcmp(comando, "DEFRAG") == 0){
             if (!defrag(args, caminho, sizecaminho-1)){
-                printf("ERRO AO DESFRAGMENTAR\n");
+                printf("DEFRAG NAO REALIZADO\n");
             }
         }else if (strcmp(comando, "CD") == 0){
             arg1 = strtok(args,"/");

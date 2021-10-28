@@ -280,7 +280,7 @@ int disk(char *path, OBJETO caminho[255], int cur){
     if(size == 0){
         return 0;
     }
-    printf("\nTotal utilizado: %i\n",size);
+    printf("\nTotal utilizado: %i KB\n",size / 1024);
     return 1;
 }
 

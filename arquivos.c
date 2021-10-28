@@ -1344,7 +1344,7 @@ int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta){
 
         pasta = retornaObjetoDaPasta(root, ind_cluster_pasta); //le se a pasta do inicio do caminho eh subpasta da pasta
 
-        if(pasta.tamanho==0 && strcmp(root, "root")==0) pasta.cluster_inicial=0;
+        if(pasta.tamanho==0 && strcmp(root, "Root")==0) pasta.cluster_inicial=0;
 
         ptr_aux = strchr(ptr,'/');
         index = ptr_aux-ptr;
@@ -1365,15 +1365,14 @@ int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta){
 
             pasta = retornaObjetoDaPasta(root, pasta.cluster_inicial); //le se a pasta do inicio do caminho eh subpasta da pasta
         }
-
         if(pasta.cluster_inicial==0) return -1;
     }
     else
     {
         pasta = retornaObjetoDaPasta(caminho, ind_cluster_pasta); //le se a pasta do inicio do caminho eh subpasta da pasta
-        if(pasta.tamanho==0)
+        if(pasta.nome[0]==0)
         {
-            if(strcmp(caminho, "root") == 0)
+            if(strcmp(caminho, "Root") == 0)
                 return 0;
             else return -1;
         }

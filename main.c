@@ -10,7 +10,9 @@ int main()
     //chamando interface e retornando sem executar chamadas de exemplo
     boot();
 
-    return;
+    return 1;
+
+    //Exemplos:
 
     OBJETO obj;
     obj = zeraObjeto(obj);

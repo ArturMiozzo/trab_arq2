@@ -63,6 +63,8 @@ void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho);
 
 int apagaPastaVazia(char nome[], uint8_t ind_cluster_pasta);
 
+int apagaPastaCheia(char nome[], uint8_t ind_cluster_pasta);
+
 void recursaoApagaPastaCheia(uint8_t ind_cluster_pasta);
 
 OBJETO retornaObjetoOcupandoCluster(uint8_t ind_cluster_buscado, uint8_t* ind_cluster_salvo);

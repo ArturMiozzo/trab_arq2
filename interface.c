@@ -4,20 +4,38 @@
 #include <stdlib.h>
 
 //Funções de interface
+void escreveCaminho(OBJETO caminho[255], int size){
+    printf("%s",caminho[0].nome);
+
+    for (int i = 1;i<size;i++){
+       printf("/%s", caminho[i].nome);
+    }
+    if(size == 1){
+        printf("/");
+    }
+
+    printf(">");
+}
+
 void boot(){
     char arg[100];
-    char strcaminho[MAX_FOLDER][MAX_FOLDER];
-    int  ncaminho[MAX_FOLDER];
+    OBJETO caminho[255];
+    OBJETO root;
     int sizecaminho = 1;
     char *comando;
     char *args;
     char *arg1;
-    int curFolder = 0;
 
-    strcpy(strcaminho[0],"root");
-    ncaminho[0] = 0;
+    for(int i = 0; i < 255; i++){
+        caminho[i] = zeraObjeto();
+    }
+
+    root = criaInfoPasta("Root");
+    caminho[0] = root;
+
+    comando = "";
     while ((strcmp(comando, "SHUTDOWN") != 0) && (strcmp(args, "-S") != 0)) {
-        escreveCaminho(strcaminho, sizecaminho);
+        escreveCaminho(caminho, sizecaminho);
         scanf("%[^\n]",arg);
 
         comando = strtok(arg, " ");
@@ -31,56 +49,61 @@ void boot(){
         comando = strupr(comando);
 
         if (strcmp(comando, "MKFILE") == 0){
-            if (!mkfile(args, curFolder)){
+            if (!mkfile(args, caminho, sizecaminho-1)){
                 printf("ERRO AO CRIAR ARQUIVO\n");
             }
         } else if (strcmp(comando, "MKDIR") == 0){
-            if (!mkdir(args, curFolder)){
+            if (!mkdir(args, caminho, sizecaminho-1)){
                 printf("ERRO AO CRIAR PASTA\n");
             }
         }else if (strcmp(comando, "DIR") == 0){
-            if (!DIR(curFolder)){
+            if (!DIR(caminho, sizecaminho-1)){
                 printf("ERRO AO LER PASTA\n");
             }
         }else if (strcmp(comando, "MOVE") == 0){
-            if (!MOVE(args, arg1, curFolder)){
+            if (!MOVE(args, arg1, caminho, sizecaminho-1)){
                 printf("ERRO MOVER ARQUIVO DA PASTA\n");
             }
         }else if (strcmp(comando, "RENAME") == 0){
-            if (!RENAME(args, arg1, curFolder)){
-                printf("ERRO AO RENOMEAR ARQUIVO\n");
+            if (!RENAME(args, arg1, caminho, sizecaminho-1)){
+                printf("ERRO AO RENOMEAR ARQUIVO/DIRETORIO\n");
             }
         }else if (strcmp(comando, "EDIT") == 0){
-            if (!edit(args, arg1, curFolder)){
+            if (!edit(args, arg1, caminho, sizecaminho-1)){
                 printf("ERRO AO EDITAR ARQUIVO\n");
+            }
+        }else if (strcmp(comando, "RM") == 0){
+            if (!remove_(args, 0, caminho, sizecaminho-1)){
+                printf("ERRO AO REMOVER ARQUIVO/DIRETORIO\n");
+            }
+        }else if (strcmp(comando, "RF") == 0){
+            if (!remove_(args, 1, caminho, sizecaminho-1)){
+                printf("ERRO AO REMOVER ARQUIVO/DIRETORIO E SEUS FILHOS\n");
             }
         }else if (strcmp(comando, "CD") == 0){
             arg1 = strtok(args,"/");
             while (arg1 != NULL ){
                 if (strcmp(arg1,"..") == 0){
                     if (sizecaminho > 1){
-                        strcpy(strcaminho[sizecaminho-1],"");
-                        ncaminho[sizecaminho-1] = -1;
+                        caminho[sizecaminho-1] = zeraObjeto();
                         sizecaminho--;
-                        curFolder = ncaminho[sizecaminho-1];
                     }
                 }else{
-                    int aux = CD(arg1, curFolder);
+                    int aux = CD(arg1, caminho, sizecaminho-1);
                     if(aux>=0)
                     {
-                        if (strcmp(arg1,"root")==0){
+                        if (strcmp(arg1,"Root")==0){
                             for (int i = sizecaminho-1;i>0;i--){
-                                strcpy(strcaminho[i],"");
-                                ncaminho[i] = -1;
+                                caminho[i] = zeraObjeto();
                             }
                             sizecaminho = 1;
-                            curFolder = 0;
                         }else{
                             sizecaminho++;
-                            strcpy(strcaminho[sizecaminho-1],arg1);
-                            ncaminho[sizecaminho-1] = aux;
-                            curFolder = aux;
+                            caminho[sizecaminho-1] = retornaObjetoDaPasta(arg1, caminho[sizecaminho-2].cluster_inicial);
                         }
+                    }
+                    else{
+                       printf("ERRO AO ACESSAR PASTA\n");
                     }
                 }
                 arg1 = strtok(NULL,"/");
@@ -93,15 +116,3 @@ void boot(){
     }
 }
 
-void escreveCaminho(char caminho[MAX_FOLDER][MAX_FOLDER], int size){
-    printf("%s",caminho[0]);
-
-    for (int i = 1;i<size;i++){
-       printf("/%s", caminho[i]);
-    }
-    if(size == 1){
-        printf("/");
-    }
-
-    printf(">");
-}

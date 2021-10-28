@@ -70,25 +70,37 @@ int main()
     caminho[2] = retornaObjetoDaPasta(pst2.nome, caminho[1].cluster_inicial);   //Salva no caminho a pasta "Pasta exemplo 2". O equivalidente a fazer um CD "Pasta exemplo 2"
 
     salvaArquivo(obj, dados, caminho[2].cluster_inicial);                       //Salva um arquivo dentro da pasta
+    salvaArquivo(obj2, dados_2, caminho[2].cluster_inicial);                       //Salva um arquivo dentro da pasta
+    salvaArquivo(obj3, dados_3, caminho[2].cluster_inicial);                       //Salva um arquivo dentro da pasta
     atualizaTamanhoDasPastas(caminho, sizeof(caminho) / sizeof(caminho[0]));    //Atualiza o tamanho da pasta
 
-    //apagaPastaVazia(pst2.nome, caminho[1].cluster_inicial);
+    salvaPasta(pst, caminho[2].cluster_inicial);                                //Cria uma pasta dentro da pasta atual
+    caminho[3] = retornaObjetoDaPasta(pst.nome, caminho[2].cluster_inicial);   //Salva no caminho a pasta "Pasta exemplo". O equivalidente a fazer um CD "Pasta exemplo"
+    salvaArquivo(obj, dados, caminho[3].cluster_inicial);                       //Salva um arquivo dentro da pasta
+    atualizaTamanhoDasPastas(caminho, sizeof(caminho) / sizeof(caminho[0]));    //Atualiza o tamanho da pasta
 
+
+    obj2 = retornaObjetoDaPasta(obj2.nome, caminho[0].cluster_inicial);
+    apagaArquivo(obj2, caminho[0].cluster_inicial);
+    obj2 = retornaObjetoDaPasta(obj2.nome, caminho[2].cluster_inicial);
+    apagaArquivo(obj2, caminho[2].cluster_inicial);
 
     //Imprime o conteúdo das pastas
+    printf("Conteudo de '%s'\n", caminho[0].nome);
     imprimePasta(caminho[0].cluster_inicial);
     printf("\n");
+    printf("Conteudo de '%s'\n", caminho[1].nome);
     imprimePasta(caminho[1].cluster_inicial);
     printf("\n");
+    printf("Conteudo de '%s'\n", caminho[2].nome);
     imprimePasta(caminho[2].cluster_inicial);
     printf("\n");
+    printf("Conteudo de '%s'\n", caminho[3].nome);
+    imprimePasta(caminho[3].cluster_inicial);
+    printf("\n");
+
+
+    printf("Objetos movidos: %d\n", reorganizaClusters());
 
     return 0;
 }
-
-
-//Função que retorna o tamanho em disco ocupado por tudo dentro da pasta atual (total de clusters ocupados * tamanho de um cluster, inclui o cluster da pasta atual).
-
-
-//Função que salva arquivos e pastas dentro de uma pasta deve atualizr o tamanho da pasta que está armazenando esss informações. Pasta de
-//tamanho 0 está vazia. Se houverem itens, tamanho é igual ao número de bytes desses itens

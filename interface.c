@@ -47,8 +47,8 @@ void boot(){
                 printf("ERRO MOVER ARQUIVO DA PASTA\n");
             }
         }else if (strcmp(comando, "RENAME") == 0){
-            if (!RENAME(args, curFolder)){
-                printf("ERRO MOVER ARQUIVO DA PASTA\n");
+            if (!RENAME(args, arg1, curFolder)){
+                printf("ERRO AO RENOMEAR ARQUIVO\n");
             }
         }else if (strcmp(comando, "EDIT") == 0){
             if (!edit(args, arg1, curFolder)){

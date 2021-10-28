@@ -101,9 +101,59 @@ int MOVE(char *file, char *path, int folder)
     return 1;
 }
 
-int RENAME(char *args, int folder)
+int RENAME(char *oldname, char *newname, int folder)
 {
+    OBJETO objAux;
+    char strPath[100];
+    char strName[100];
+    char *strAux;
+    int sizeStr;
+    int nFolder;
 
+    strcpy(strPath,oldname);
+    strcpy(strAux, strtok(oldname,"/"));
+    strcpy(strName, strAux);
+
+    if (strcmp(strAux, strPath)!=0){
+        while (strAux != NULL){
+            strcpy(strName, strAux);
+            strAux = strtok(NULL,"/");
+        }
+        strPath[strlen(strPath)-strlen(strName)-1] = 0;
+        nFolder = retornaClusterCaminho(strPath, folder);
+    }else{
+        strcpy(strPath, "");
+        nFolder = folder;
+    }
+
+    //faz as validações dos nomes
+    if (strstr(strName, ".txt") == NULL){
+        //se não tem .txt, pelas validações na hora de criar um obj, é obrigatoriamente uma pasta
+        //sendo uma pasta, retorna 0 se há uma extensão no novo nome
+        if (strrchr(newname,'.')-newname > -1){
+            return 0;
+        }
+    }else{
+        //possuindo .txt, pelas validações na hora de criar um obj, este está no final e o objeto é um arquivo
+        //assim, se o novo nome não termina com .txt, retorna 0
+        sizeStr = strlen(newname);
+        if ((sizeStr < 4) || (newname[sizeStr-4] != '.') || (newname[sizeStr-3] != 't') || (newname[sizeStr-2] != 'x') ||
+            (newname[sizeStr-1] != 't')){
+            return 0;
+        }
+    }
+
+    objAux = retornaObjetoDaPasta(strName, nFolder);
+    if (strcmp(objAux.nome,"") == 0){
+        return 0;
+    }
+
+    removeObjetoDaPasta(strName, nFolder);
+
+    strcpy(objAux.nome, newname);
+    salvaObjetoNaPasta(objAux, nFolder);
+
+    return 1;
 }
 
 int edit(char *name, char* newdata,int folder){

@@ -10,7 +10,7 @@ int mkdir(char *name, int folder);
 
 int MOVE(char *file, char *path, int folder);
 
-int RENAME(char *args, int folder);
+int RENAME(char *oldname, char *newname, int folder);
 
 int edit(char *name, char* newdata,int folder);
 

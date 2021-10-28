@@ -1,3 +1,8 @@
+//Componentes do grupo:
+// - Artur Miozzo;
+// - Arthur Casagrande
+// - Paulo Roberto Gomes
+
 #ifndef struct
 
 #define FILENAME "LightFS.bin"

@@ -1,3 +1,8 @@
+//Componentes do grupo:
+// - Artur Miozzo;
+// - Arthur Casagrande
+// - Paulo Roberto Gomes
+
 #include "comandos.h"
 #include "interface.h"
 #include <stdio.h>

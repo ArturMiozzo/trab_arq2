@@ -1,3 +1,8 @@
+//Componentes do grupo:
+// - Artur Miozzo;
+// - Arthur Casagrande
+// - Paulo Roberto Gomes
+
 #include <stdio.h>
 #include <math.h>
 #include <stdint.h>

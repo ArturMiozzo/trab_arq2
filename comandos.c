@@ -171,6 +171,7 @@ int edit(char *name, char* newdata, OBJETO caminho[255], int cur){
     char *originalName = name;
     char strName[100];
     char strPath[100];
+    int baseFolder;
     int nFolder;
     OBJETO obj;
 
@@ -180,6 +181,13 @@ int edit(char *name, char* newdata, OBJETO caminho[255], int cur){
 
     strcpy(strPath,name);
     strcpy(strAux, strtok(originalName,"/"));
+
+    baseFolder = caminho[cur].cluster_inicial;
+
+    if (strcmp(strAux, "Root") == 0){
+        baseFolder = caminho[0].cluster_inicial;
+        strcpy(strAux, "");
+    }
 
     while (strAux != NULL){
         strcpy(strName, strAux);
@@ -199,7 +207,7 @@ int edit(char *name, char* newdata, OBJETO caminho[255], int cur){
         nFolder = caminho[cur].cluster_inicial;
         obj = retornaObjetoDaPasta(strName, caminho[cur].cluster_inicial);
     }else{
-        nFolder = retornaClusterCaminho(strPath,caminho[cur].cluster_inicial);
+        nFolder = retornaClusterCaminho(strPath,baseFolder);
         obj = retornaObjetoDaPasta(strName, nFolder);
     }
 

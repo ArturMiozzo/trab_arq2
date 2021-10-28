@@ -43,7 +43,7 @@ void boot(){
                 printf("ERRO AO LER PASTA\n");
             }
         }else if (strcmp(comando, "MOVE") == 0){
-            if (!MOVE(args, curFolder)){
+            if (!MOVE(args, arg1, curFolder)){
                 printf("ERRO MOVER ARQUIVO DA PASTA\n");
             }
         }else if (strcmp(comando, "RENAME") == 0){

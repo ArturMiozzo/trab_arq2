@@ -53,9 +53,52 @@ int mkdir(char *name, int folder){
     return 1;
 }
 
-int MOVE(char *args, int folder)
+int MOVE(char *file, char *path, int folder)
 {
+    char dirpath[100];
+    char fileName[100];
+    int folderIn;
+    OBJETO objMove, tmpObj;
 
+    int folderOut = retornaClusterCaminho(path, folder);
+    if(folderOut<0) return 0;
+
+    char *ptr_aux = strrchr(file,'/');
+
+    int index = ptr_aux-file;
+
+    if(index>0)
+    {
+        strncpy(dirpath, file, index);
+        strcpy(fileName, ptr_aux);
+        folderIn = retornaClusterCaminho(dirpath);
+        if(folderIn<0) return 0;
+    }
+    else
+    {
+        strcpy(fileName, file);
+        folderIn = folder;
+    }
+
+    tmpObj = retornaObjetoDaPasta(fileName, folderOut);
+    if(tmpObj.tamanho>0) return 0;
+
+    objMove = retornaObjetoDaPasta(fileName, folderIn);
+    if(objMove.tamanho==0) return 0;
+
+    tmpObj = zeraObjeto();
+
+    tmpObj.cluster_inicial = objMove.cluster_inicial;
+    tmpObj.tamanho = objMove.tamanho;
+
+    strcpy(tmpObj.extensao, objMove.extensao);
+    strcpy(tmpObj.nome, objMove.nome);
+
+    removeObjetoDaPasta(fileName, folderIn);
+
+    salvaObjetoNaPasta(tmpObj, folderOut);
+
+    return 1;
 }
 
 int RENAME(char *args, int folder)

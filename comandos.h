@@ -19,3 +19,7 @@ int edit(char *name, char* newdata, OBJETO caminho[255], int cur);
 int CD(char *args, OBJETO caminho[255], int cur);
 
 int remove_(char *path, int force, OBJETO caminho[255], int cur);
+
+int disk(char *path, OBJETO caminho[255], int cur);
+
+int defrag(char *path, OBJETO caminho[255], int cur);

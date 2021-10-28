@@ -266,3 +266,18 @@ int remove_(char *path, int force, OBJETO caminho[255], int cur){
         }
     }
 }
+
+int disk(char *path, OBJETO caminho[255], int cur){
+    int size;
+
+    size = calculaTamanhoReservadoDaPasta(caminho[cur].cluster_inicial);
+
+    if(size == 0){
+        return 0;
+    }
+    printf("\nTotal utilizado: %i\n",size);
+}
+
+int defrag(char *path, OBJETO caminho[255], int cur){
+    return 0;
+}

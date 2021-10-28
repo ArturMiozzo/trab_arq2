@@ -80,6 +80,14 @@ void boot(){
             if (!remove_(args, 1, caminho, sizecaminho-1)){
                 printf("ERRO AO REMOVER ARQUIVO/DIRETORIO E SEUS FILHOS\n");
             }
+        }else if (strcmp(comando, "DISK") == 0){
+            if (!disk(args, caminho, sizecaminho-1)){
+                printf("ERRO AO CALCULAR ESPACO\n");
+            }
+        }else if (strcmp(comando, "DEFRAG") == 0){
+            if (!defrag(args, caminho, sizecaminho-1)){
+                printf("ERRO AO DESFRAGMENTAR\n");
+            }
         }else if (strcmp(comando, "CD") == 0){
             arg1 = strtok(args,"/");
             while (arg1 != NULL ){

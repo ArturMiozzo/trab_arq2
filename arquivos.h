@@ -3,6 +3,7 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <stdlib.h>
 #include "struct.h"
 
 //Funções que manipulam os arquivos
@@ -61,3 +62,11 @@ int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pas
 void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho);
 
 int apagaPastaVazia(char nome[], uint8_t ind_cluster_pasta);
+
+void recursaoApagaPastaCheia(uint8_t ind_cluster_pasta);
+
+OBJETO retornaObjetoOcupandoCluster(uint8_t ind_cluster_buscado, uint8_t* ind_cluster_salvo);
+
+char* retornaDadosDoArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta);
+
+int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta);

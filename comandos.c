@@ -71,7 +71,7 @@ int MOVE(char *file, char *path, int folder)
     {
         strncpy(dirpath, file, index);
         strcpy(fileName, ptr_aux);
-        folderIn = retornaClusterCaminho(dirpath);
+        folderIn = retornaClusterCaminho(dirpath, folder);
         if(folderIn<0) return 0;
     }
     else
@@ -106,7 +106,7 @@ int RENAME(char *oldname, char *newname, int folder)
     OBJETO objAux;
     char strPath[100];
     char strName[100];
-    char *strAux;
+    char *strAux = malloc(sizeof(*strAux));
     int sizeStr;
     int nFolder;
 

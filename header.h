@@ -4,6 +4,7 @@
 #include <math.h>
 #include <stdint.h>
 #include <stdbool.h>
+#include <stdlib.h>
 #include <string.h>
 #include "struct.h"
 
@@ -62,6 +63,30 @@ int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pas
 void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho);
 
 int apagaPastaVazia(char nome[], uint8_t ind_cluster_pasta);
+
+void lacoApagaArquivo(uint8_t ind_cluster_pasta);
+
+void lacoEntraPastaCheia(uint8_t ind_cluster_pasta);
+
+void lacoApagaPastaVazia(uint8_t ind_cluster_pasta);
+
+void recursaoApagaPastaCheia(uint8_t ind_cluster_pasta);
+
+int apagaPastaCheia(char nome[], uint8_t ind_cluster_pasta);
+
+int modificaInfoCluster(char nome[], int cluster_atualizado, uint8_t ind_cluster_pasta);
+
+char* retornaDadosDoArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta);
+
+OBJETO buscaOcupaCluster(uint8_t ind_cluster_buscado, uint8_t ind_cluster_atual, uint8_t* ind_cluster_salvo);
+
+OBJETO retornaObjetoOcupandoCluster(uint8_t ind_cluster_buscado, uint8_t* ind_cluster_salvo);
+
+int reorganizaClusters();
+
+int recursaoCalculaTamanhoReservado(uint8_t ind_cluster_pasta);
+
+int calculaTamanhoReservadoDaPasta(uint8_t ind_cluster_pasta);
 
 //---------------------------------------------------------------------------------
 

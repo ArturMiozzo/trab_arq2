@@ -103,7 +103,7 @@ void criaArquivoDados(int reset){
 }
 
 CLUSTER leCluster(uint8_t ind_cluster){
-    //Retorna o cluster do �ndice informado
+    //Retorna o cluster do índice informado
 
     FILE* light_fs;
     CLUSTER clust;
@@ -130,7 +130,7 @@ CLUSTER leCluster(uint8_t ind_cluster){
 }
 
 void escreveCluster(CLUSTER cluster, uint8_t ind_cluster){
-    //Recebe um cluster como par�metro e escreve ele dentro do arquivo do sistema
+    //Recebe um cluster como parâmetro e escreve ele dentro do arquivo do sistema
 
     FILE* light_fs;
 
@@ -207,16 +207,16 @@ void escreveIndice(uint8_t valor, uint8_t indice){
 }
 
 void posicionaCursorNoCluster(uint8_t ind_cluster, FILE* light_fs){
-    //Coloca o curso do arquivo no cluster informado
+    //Coloca o cursor do arquivo no cluster informado
 
     rewind(light_fs);
     fseek(light_fs, sizeof(METADADOS), SEEK_SET);               //Salta os metadados
-    fseek(light_fs, sizeof(INDICE), SEEK_CUR);                  //Salta o �ndice
+    fseek(light_fs, sizeof(INDICE), SEEK_CUR);                  //Salta o índice
     fseek(light_fs, ind_cluster * sizeof(CLUSTER), SEEK_CUR);   //Chega no cluster indicado
 }
 
 bool checaNomeRepetido(char nome[], uint8_t ind_cluster, FILE* light_fs){
-    //Busca dentro da pasta se j� existe algum item com o nome informado
+    //Busca dentro da pasta se já existe algum item com o nome informado
 
     char buffer[54];
     int contador = sizeof(CLUSTER) / sizeof(OBJETO);
@@ -237,16 +237,16 @@ bool checaNomeRepetido(char nome[], uint8_t ind_cluster, FILE* light_fs){
         contador--;
     }
 
-    return false;   //Se chegar at� aqui � porque n�o encontrou um nome repetido
+    return false;   //Se chegar até aqui é porque não encontrou um nome repetido
 }
 
 int salvaObjetoNaPasta(OBJETO objeto, uint8_t ind_cluster){
-    //Retorna 1 se tudo est� OK
-    //Retorna 0 se j� existe um objeto de mesmo nome
+    //Retorna 1 se tudo está OK
+    //Retorna 0 se já existe um objeto de mesmo nome
 
     FILE* light_fs;
     char buffer;
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
 
     light_fs = fopen(FILENAME, "rb+");
     if(light_fs == NULL)
@@ -255,7 +255,7 @@ int salvaObjetoNaPasta(OBJETO objeto, uint8_t ind_cluster){
     }
     else
     {
-        //Checa se j� n�o existe um objeto de mesmo nome
+        //Checa se já não existe um objeto de mesmo nome
         if(checaNomeRepetido(objeto.nome, ind_cluster, light_fs)){
             printf("O item [%s] ja existe!\n", objeto.nome);
             return 0;
@@ -263,7 +263,7 @@ int salvaObjetoNaPasta(OBJETO objeto, uint8_t ind_cluster){
 
         posicionaCursorNoCluster(ind_cluster, light_fs);
 
-        //Busca a primeira �rea livre
+        //Busca a primeira área livre
         while(contador > 0){
             fread(&buffer, sizeof(char), 1, light_fs);
 
@@ -280,10 +280,10 @@ int salvaObjetoNaPasta(OBJETO objeto, uint8_t ind_cluster){
         fseek(light_fs, -1*sizeof(char), SEEK_CUR);
 
         if(contador > 0){
-            fwrite(&objeto, sizeof(OBJETO), 1, light_fs);           //Salva o objeto nessa posi��o livre
+            fwrite(&objeto, sizeof(OBJETO), 1, light_fs);           //Salva o objeto nessa posição livre
         }
         else{
-            printf("N�o h� espa�o dispon�vel na pasta!\n");
+            printf("Não há espaço disponível na pasta!\n");
         }
 
 
@@ -296,12 +296,12 @@ int salvaObjetoNaPasta(OBJETO objeto, uint8_t ind_cluster){
 
 void removeObjetoDaPasta(char nome_objeto[], uint8_t ind_cluster){
     //Apaga um item da pasta sobreescrevendo ele com um objeto vazio
-    //Vers�o n�o segura. N�o checa se � uma pasta vazia ou n�o.
+    //Versão não segura. Não checa se é uma pasta vazia ou não.
 
     FILE* light_fs;
     OBJETO obj;
     char buffer[64];
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
 
     obj = zeraObjeto();
 
@@ -322,7 +322,7 @@ void removeObjetoDaPasta(char nome_objeto[], uint8_t ind_cluster){
                 fwrite(&obj, sizeof(OBJETO), 1, light_fs);
                 break;
             }
-            else{                                                   //Se n�o, continua a busca
+            else{                                                   //Se não, continua a busca
                 fseek(light_fs, -54 * sizeof(char), SEEK_CUR);
                 fseek(light_fs, sizeof(OBJETO), SEEK_CUR);
             }
@@ -343,7 +343,7 @@ void imprimePasta(uint8_t ind_cluster){
 
     FILE* light_fs;
     OBJETO obj;
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
     int num_objetos = 0;
 
     light_fs = fopen(FILENAME, "rb+");
@@ -392,7 +392,7 @@ void imprimePasta(uint8_t ind_cluster){
 }
 
 int buscaClusterLivre(){
-    //Retorna o �ndice do primeiro cluster livre encontrado
+    //Retorna o índice do primeiro cluster livre encontrado
 
     int indice;
     for(indice = 1; indice < sizeof(INDICE); indice++){
@@ -401,7 +401,7 @@ int buscaClusterLivre(){
         }
     }
 
-    if(indice == sizeof(INDICE)){   //N�o encontrou cluster livre
+    if(indice == sizeof(INDICE)){   //Não encontrou cluster livre
         return -1;
     }
     else{
@@ -410,7 +410,7 @@ int buscaClusterLivre(){
 }
 
 int buscaNumeroClustersLivres(){
-    //Retorna o n�mero total de cluster dispon�veis para uso
+    //Retorna o número total de cluster disponíveis para uso
 
     int i;
     int total = 0;
@@ -424,7 +424,7 @@ int buscaNumeroClustersLivres(){
 }
 
 int salvaArquivo(OBJETO objeto, char dados[], uint8_t ind_cluster_pasta){
-    //Salvamento completo. Salva as informa��es do arquivo dentro da pasta, aloca os dados dentro de um cluster livre e atualiza os �ndices.
+    //Salvamento completo. Salva as informações do arquivo dentro da pasta, aloca os dados dentro de um cluster livre e atualiza os índices.
     //Return 0 se acontecer algum problema
     //Return 1 se ocorrer tudo certo
 
@@ -439,7 +439,7 @@ int salvaArquivo(OBJETO objeto, char dados[], uint8_t ind_cluster_pasta){
 
     num_clusters = ((strlen(dados) + 1) / sizeof(CLUSTER)) + 1;
 
-    if(buscaNumeroClustersLivres() < num_clusters){             //Checa se s�o necess�rios mais clusters do que se tem dispon�veis
+    if(buscaNumeroClustersLivres() < num_clusters){             //Checa se são necessários mais clusters do que se tem disponíveis
         printf("Nao existem clusters livres suficientes!");
         return 0;
     }
@@ -447,16 +447,16 @@ int salvaArquivo(OBJETO objeto, char dados[], uint8_t ind_cluster_pasta){
     //Busca um cluster vazio para guardar os dados
     indice_atual = buscaClusterLivre();
 
-    //Termina de preencher as informa��es do objeto e salva na pasta
+    //Termina de preencher as informações do objeto e salva na pasta
     objeto.cluster_inicial = indice_atual;
     objeto.tamanho = strlen(dados) + 1;
-    if(salvaObjetoNaPasta(objeto, ind_cluster_pasta) == 0){    //Se o objeto j� existe, a fun��o � encerrada
+    if(salvaObjetoNaPasta(objeto, ind_cluster_pasta) == 0){    //Se o objeto já existe, a função é encerrada
         return 0;
     }
 
 
-    //Come�a a etapa de armazenar os dados
-    if(objeto.tamanho <= sizeof(CLUSTER)){                 //Os dados cabem em um �nico cluster
+    //Começa a etapa de armazenar os dados
+    if(objeto.tamanho <= sizeof(CLUSTER)){                 //Os dados cabem em um único cluster
 
         strcpy(clust.dados, dados);
         escreveCluster(clust, indice_atual);
@@ -481,7 +481,7 @@ int salvaArquivo(OBJETO objeto, char dados[], uint8_t ind_cluster_pasta){
             }
         }
 
-        escreveCluster(clust, indice_atual);                    //�ltimo cluster parcialmente preenchido
+        escreveCluster(clust, indice_atual);                    //Último cluster parcialmente preenchido
         escreveIndice(indice_atual, indice_atual);
     }
 
@@ -497,14 +497,14 @@ int salvaPasta(OBJETO objeto, uint8_t ind_cluster_pasta){
 
     //Busca um cluster vazio para guardar os dados
     indice = buscaClusterLivre();
-    if(indice == -1){                     //Se n�o houver cluster dispon�vel a fun��o se encerra
+    if(indice == -1){                     //Se não houver cluster disponível a função se encerra
         return 0;
     }
 
-    //Termina de preencher as informa��es do objeto e salva na pasta atual
+    //Termina de preencher as informações do objeto e salva na pasta atual
     objeto.cluster_inicial = indice;
     objeto.tamanho = 0;
-    if(salvaObjetoNaPasta(objeto, ind_cluster_pasta) == 0){    //Se o objeto j� existe, a fun��o � encerrada
+    if(salvaObjetoNaPasta(objeto, ind_cluster_pasta) == 0){    //Se o objeto já existe, a função é encerrada
         return 0;
     }
 
@@ -550,7 +550,7 @@ OBJETO retornaObjetoDaPasta(char nome[], uint8_t ind_cluster_pasta){
 
     FILE* light_fs;
     OBJETO obj;
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
 
     light_fs = fopen(FILENAME, "rb+");
     if(light_fs == NULL)
@@ -580,7 +580,7 @@ OBJETO retornaObjetoDaPasta(char nome[], uint8_t ind_cluster_pasta){
     fclose(light_fs);
 
     if(contador == 0){                                  //Se não encontrar o objeto informado retorna um objeto vazio
-        //printf("Item nao encontrado na pasta!\n");
+        printf("Item nao encontrado na pasta!\n");
         obj = zeraObjeto();
         return obj;
     }
@@ -590,7 +590,7 @@ OBJETO retornaObjetoDaPasta(char nome[], uint8_t ind_cluster_pasta){
 }
 
 void apagaArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta){
-    //Apaga um arquivo, tanto suas informa��es da pasta quanto os dados alocados
+    //Apaga um arquivo, tanto suas informações da pasta quanto os dados alocados
 
     uint8_t indice_atual;
     uint8_t indice_seg;
@@ -600,7 +600,7 @@ void apagaArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta){
     indice_seg = leIndice(indice_atual);
     clust = zeraCluster();
 
-    //Limpa os clusters e �ndices
+    //Limpa os clusters e índices
     while(indice_atual != indice_seg){
         escreveCluster(clust, indice_atual);
         escreveIndice(0, indice_atual);
@@ -613,15 +613,26 @@ void apagaArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta){
     removeObjetoDaPasta(arquivo.nome, ind_cluster_pasta);
 }
 
+void apagaPasta(OBJETO pasta, uint8_t ind_cluster_pasta){
+    //Versão não segura. Apaga as informações, limpa o índice e o cluster
+
+    uint8_t indice = pasta.cluster_inicial;
+    CLUSTER clust = zeraCluster();
+
+    escreveCluster(clust, indice);
+    escreveIndice(0, indice);
+    removeObjetoDaPasta(pasta.nome, ind_cluster_pasta);
+}
+
 int modificaArquivo(OBJETO arquivo, char novos_dados[], uint8_t ind_cluster_pasta){
-    //Apaga a vers�o original e salva uma nova vers�o com os novos dados, atualizando tanto as informa��es na pasta quando os dados nos clusters
+    //Apaga a versão original e salva uma nova versão com os novos dados, atualizando tanto as informações na pasta quando os dados nos clusters
 
     int espaco_necessario = strlen(novos_dados) + 1;
     int espaco_livre = (buscaNumeroClustersLivres() * sizeof(CLUSTER)) + arquivo.tamanho;
 
     if(espaco_necessario > espaco_livre){
 
-        printf("Nao ha espa�o disponivel para alocar os novos dados!\n");
+        printf("Nao ha espaço disponivel para alocar os novos dados!\n");
         return 0;
     }
     else{
@@ -634,11 +645,11 @@ int modificaArquivo(OBJETO arquivo, char novos_dados[], uint8_t ind_cluster_past
 }
 
 int calculaTamanhoDaPasta(uint8_t ind_cluster_pasta){
-    //Calcula o tamanho de tudo que est� armazenado dentro da pasta atual somando seus tamanhos
+    //Calcula o tamanho de tudo que está armazenado dentro da pasta atual somando seus tamanhos
 
     FILE* light_fs;
     OBJETO obj;
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
     int tamanho_total = 0;
     int objetos = 0;
 
@@ -691,7 +702,7 @@ int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pas
 
     FILE* light_fs;
     OBJETO obj = zeraObjeto();
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
 
     light_fs = fopen(FILENAME, "rb+");
     if(light_fs == NULL)
@@ -717,25 +728,27 @@ int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pas
             contador--;
         }
 
-        fwrite(&tam_atualizado, sizeof(obj.tamanho), 1, light_fs);
-
         fflush(light_fs);
     }
-    fclose(light_fs);
+
 
     if(contador == 0){
         printf("Item nao encontrado na pasta!\n");
+        fclose(light_fs);
         return 0;
     }
     else{
+
+        fwrite(&tam_atualizado, sizeof(obj.tamanho), 1, light_fs);
+        fclose(light_fs);
         return 1;
     }
 }
 
 void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho){
-    //Atualiza o tamanho de todas as pastas que est�o no caminho da cria��o/remo��o/modifica��o de um arquivo
-    //caminho � o vetor que guarda as informa��es do caminho de pastas acessadas desde a ra�z, que fica em caminho[0], at� a pasta atual
-    //� necess�rio informar tamb�m o tamanho do vetor de caminho
+    //Atualiza o tamanho de todas as pastas que estão no caminho da criação/remoção/modificação de um arquivo
+    //caminho é o vetor que guarda as informações do caminho de pastas acessadas desde a raíz, que fica em caminho[0], até a pasta atual
+    //É necessário informar também o tamanho do vetor de caminho
 
     FILE* light_fs;
     OBJETO obj = zeraObjeto();
@@ -778,10 +791,11 @@ void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho){
 }
 
 int apagaPastaVazia(char nome[], uint8_t ind_cluster_pasta){
+    //Apaga as informações da pasta atual, zera o índice e sobreescreve o cluster alocado com um cluster vazio
 
     FILE* light_fs;
-    OBJETO obj;
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
 
     light_fs = fopen(FILENAME, "rb+");
     if(light_fs == NULL)
@@ -815,57 +829,167 @@ int apagaPastaVazia(char nome[], uint8_t ind_cluster_pasta){
         return 0;
     }
     else if(obj.tamanho != 0){
-        printf("A pasta nao pode ser pagada porque tem itens dentro!\n");
+        printf("A pasta nao pode ser apagada porque tem itens dentro!\n");
         return 0;
     }
     else{
 
-        apagaArquivo(obj, ind_cluster_pasta);
+        apagaPasta(obj, ind_cluster_pasta);
 
         return 1;
     }
 }
-/*
-int recursaoApagaPastaCheia(uint8_t ind_cluster_pasta, FILE* light_fs){
 
-    OBJETO obj;
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
-    int clusters_ocupados[255];
-    int i;
-
-    for(i = 0; i < 255; i++){
-        clusters_ocupados[i] = 0;
-    }
-
-    posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
-
-    while(contador > 0){
-
-        fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
-        fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
-        fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
-        fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
-
-        if(obj.extensao[0] != 0){
-
-            apagaArquivo(obj, )
-        }
-
-        contador--;
-    }
-}*/
-/*
-int apagaPastaCheia(char nome[], uint8_t ind_cluster_pasta){
+void lacoApagaArquivo(uint8_t ind_cluster_pasta){
+    //Apaga todos os arquivos dentro da pasta atual
 
     FILE* light_fs;
-    OBJETO obj;
-    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero m�ximo de objetos que podem existir em uma pasta
-    int clusters_ocupados[255];
-    int i;
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
+    int objetos_lidos = 0;
 
-    for(i = 0; i < 255; i++){
-        clusters_ocupados[i] = 0;
+
+    //Laço que apaga os arquivos
+    while(contador > 0){
+
+        light_fs = fopen(FILENAME, "rb+");
+        if(light_fs == NULL)
+        {
+            printf("Erro na abertura do arquivo!\n");
+        }
+        else
+        {
+            posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
+            fseek(light_fs, objetos_lidos * sizeof(OBJETO), SEEK_CUR);
+
+            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+
+            objetos_lidos++;
+
+            if(obj.nome[0] != 0 && obj.extensao[0] != 0){
+
+                fclose(light_fs);
+                apagaArquivo(obj, ind_cluster_pasta);       //A função abre e fecha o arquivo, então antes de chamar ela a chamada atual do arquivo deve ser fechada
+                contador--;
+                continue;
+            }
+        }
+
+        fclose(light_fs);
+        contador--;
     }
+
+}
+
+void lacoEntraPastaCheia(uint8_t ind_cluster_pasta){
+    //Busca as pastas ocupadas dentro da pasta atual e faz a chamada recursiva
+
+    FILE* light_fs;
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
+    int objetos_lidos = 0;
+
+
+    //Laço que busca as pastas cheias para limpar
+    while(contador > 0){
+
+        light_fs = fopen(FILENAME, "rb+");
+        if(light_fs == NULL)
+        {
+            printf("Erro na abertura do arquivo!\n");
+        }
+        else
+        {
+            posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
+            fseek(light_fs, objetos_lidos * sizeof(OBJETO), SEEK_CUR);
+
+            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+
+            objetos_lidos++;
+
+            if(obj.nome[0] != 0 && obj.extensao[0] == 0 && obj.tamanho != 0){
+
+                fclose(light_fs);
+                recursaoApagaPastaCheia(obj.cluster_inicial);   //A função abre e fecha o arquivo, então antes de chamar ela a chamada atual do arquivo deve ser fechada
+                contador--;
+                continue;
+
+            }
+        }
+
+        fclose(light_fs);
+        contador--;
+    }
+
+}
+
+void lacoApagaPastaVazia(uint8_t ind_cluster_pasta){
+    //Apaga todas as pastas vazias dentro da pasta atual
+
+    FILE* light_fs;
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
+    int objetos_lidos = 0;
+
+
+    //Laço que busca as pastas cheias para limpar
+    while(contador > 0){
+
+        light_fs = fopen(FILENAME, "rb+");
+        if(light_fs == NULL)
+        {
+            printf("Erro na abertura do arquivo!\n");
+        }
+        else
+        {
+            posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
+            fseek(light_fs, objetos_lidos * sizeof(OBJETO), SEEK_CUR);
+
+            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+
+            objetos_lidos++;
+
+
+
+            if(obj.nome[0] != 0 && obj.extensao[0] == 0){
+                fclose(light_fs);
+                apagaPasta(obj, ind_cluster_pasta);   //A função abre e fecha o arquivo, então antes de chamar ela a chamada atual do arquivo deve ser fechada
+                contador--;
+                continue;
+
+
+            }
+        }
+
+        fclose(light_fs);
+        contador--;
+    }
+
+}
+
+void recursaoApagaPastaCheia(uint8_t ind_cluster_pasta){
+    //Deleta recursivamente tudo que existe dentro da pasta informada
+
+    lacoApagaArquivo(ind_cluster_pasta);
+    lacoEntraPastaCheia(ind_cluster_pasta);
+    lacoApagaPastaVazia(ind_cluster_pasta);
+}
+
+int apagaPastaCheia(char nome[], uint8_t ind_cluster_pasta){
+    //Busca a pasta informada, deleta tudo que existe dentro dela e então deleta ela já vazia
+
+    FILE* light_fs;
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
 
     light_fs = fopen(FILENAME, "rb+");
     if(light_fs == NULL)
@@ -874,6 +998,7 @@ int apagaPastaCheia(char nome[], uint8_t ind_cluster_pasta){
     }
     else
     {
+        //Busca a pasta informada
         posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
 
         while(contador > 0){
@@ -893,23 +1018,312 @@ int apagaPastaCheia(char nome[], uint8_t ind_cluster_pasta){
 
         fflush(light_fs);
     }
+
     fclose(light_fs);
 
     if(contador == 0){
         printf("Item nao encontrado na pasta!\n");
-        return 0;
-    }
-    else if(obj.tamanho != 0){
-        printf("A pasta nao pode ser pagada porque tem itens dentro!\n");
+
         return 0;
     }
     else{
 
-        apagaArquivo(obj, ind_cluster_pasta);
+        //Apaga tudo que tem dentro dela recursivamente
+        recursaoApagaPastaCheia(obj.cluster_inicial);
+
+        //Apaga a pasta já vazia
+        apagaPasta(obj, ind_cluster_pasta);
 
         return 1;
     }
-}*/
+}
+
+int modificaInfoCluster(char nome[], int cluster_atualizado, uint8_t ind_cluster_pasta){
+
+    FILE* light_fs;
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
+
+    light_fs = fopen(FILENAME, "rb+");
+    if(light_fs == NULL)
+    {
+        printf("Erro na abertura do arquivo!\n");
+    }
+    else
+    {
+        posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
+
+        while(contador > 0){
+
+            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+
+            if(strcmp(obj.nome, nome) == 0){
+                fseek(light_fs, -1 * (sizeof(obj.tamanho) + sizeof(obj.cluster_inicial)), SEEK_CUR);
+                break;
+            }
+
+            contador--;
+        }
+
+        fflush(light_fs);
+    }
+
+
+    if(contador == 0){
+        printf("Item nao encontrado na pasta!\n");
+        fclose(light_fs);
+        return 0;
+    }
+    else{
+
+        fwrite(&cluster_atualizado, sizeof(obj.cluster_inicial), 1, light_fs);
+        fclose(light_fs);
+        return 1;
+    }
+}
+
+int reorganizaClusters(){
+    //Percorre os índices. Quando acha um indice livre vai em busca de um ocupado na sequência. Se isso acontecer, salva esse arquivo em um buffer, apaga
+    //ele do sistema e então salva novamente no sistema.
+
+    int i, j;
+    OBJETO obj = zeraObjeto();
+    CLUSTER clust = zeraCluster();
+    uint8_t cluster_salvo = 0;
+    int objetos_movidos = 0;
+
+    for(i = 1; i < sizeof(INDICE); i++){
+
+        if(leIndice(i) == 0){   //Encontrou um cluster vazio
+
+            for(j = i; j < sizeof(INDICE); j++){
+
+                if(leIndice(j) != 0){   //Encontrou um cluster ocupado
+
+                    obj = retornaObjetoOcupandoCluster(j, &cluster_salvo);
+
+                    if(obj.extensao[0] == 0){   //É uma pasta
+
+                        //Pasta vazia. Corrige os índices e atualiza o apontamento de cluster inicial
+                        if(obj.tamanho == 0){
+                            escreveIndice(0, j);
+                            escreveIndice(i, i);
+                            modificaInfoCluster(obj.nome, i, cluster_salvo);
+                            objetos_movidos++;
+                        }
+                        //Pasta ocupada. Faz backup das informações de dentro dela, corrige os índices, atualiza o apontamento de cluster inicial e restaura o backup
+                        else{
+                            clust = leCluster(obj.cluster_inicial);
+                            escreveIndice(0, j);
+                            escreveIndice(i, i);
+                            modificaInfoCluster(obj.nome, i, cluster_salvo);
+                            escreveCluster(clust, i);
+                            objetos_movidos++;
+                        }
+
+                    }
+                    else{                       //É um arquivo
+                        //Faz backup dos dados, apaga o arquivo e salva novamente
+                        char *dados = (char*) malloc(obj.tamanho * sizeof(char));
+                        dados = retornaDadosDoArquivo(obj, cluster_salvo);
+
+                        apagaArquivo(obj, cluster_salvo);
+                        salvaArquivo(obj, dados, cluster_salvo);
+                        objetos_movidos++;
+                    }
+
+                    break;
+                }
+            }
+
+        }
+
+        cluster_salvo = 0;
+    }
+
+    return objetos_movidos;
+}
+
+char* retornaDadosDoArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta){
+    //Lê e retorna os dados de um arquivo
+
+    uint8_t indice_atual;
+    uint8_t indice_seg;
+    char *dados = (char*) malloc(arquivo.tamanho * sizeof(char));
+    CLUSTER clust = zeraCluster();
+    int i;
+
+    for(i = 0; i < arquivo.tamanho; i++){
+        dados[i] = 0;
+    }
+
+    indice_atual = arquivo.cluster_inicial;
+    indice_seg = leIndice(indice_atual);
+
+    //Limpa os clusters e índices
+    while(indice_atual != indice_seg){
+
+        clust = leCluster(indice_atual);
+        strcat(dados, clust.dados);
+
+        indice_atual = indice_seg;
+        indice_seg = leIndice(indice_atual);
+    }
+    clust = leCluster(indice_atual);
+    strcat(dados, clust.dados);
+
+    return dados;
+}
+
+OBJETO buscaOcupaCluster(uint8_t ind_cluster_buscado, uint8_t ind_cluster_atual, uint8_t* ind_cluster_salvo){
+    //Busca qual objeto ocupa o cluster informado. Retorna via ponteiro em qual pasta as informações desse onjeto estão guardadas
+
+    FILE* light_fs;
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
+    int objetos_lidos = 0;
+    int ind_at = 0;
+    int ind_seg = 0;
+
+
+    while(contador > 0){
+
+        light_fs = fopen(FILENAME, "rb+");
+        if(light_fs == NULL)
+        {
+            printf("Erro na abertura do arquivo!\n");
+        }
+        else
+        {
+            posicionaCursorNoCluster(ind_cluster_atual, light_fs);
+            fseek(light_fs, objetos_lidos * sizeof(OBJETO), SEEK_CUR);
+
+            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+
+            objetos_lidos++;
+            fclose(light_fs);
+
+            if(obj.cluster_inicial == ind_cluster_buscado){ //O cluster buscado é o cluster inicial de algum objeto
+
+                if(*ind_cluster_salvo <= 0){
+                    *ind_cluster_salvo = ind_cluster_atual;
+                }
+                break;
+            }
+            else if(obj.tamanho > sizeof(CLUSTER) && obj.extensao[0] != 0){  //Checa se o objeto é um arquivo que ocupa vários clusters
+
+                ind_at = obj.cluster_inicial;
+                ind_seg = leIndice(ind_at);
+
+                while(ind_at != ind_seg){
+                    if(ind_at == ind_cluster_buscado){
+                        if(*ind_cluster_salvo <= 0){
+                            *ind_cluster_salvo = ind_cluster_atual;
+                        }
+                        break;
+                    }
+
+                    ind_at = ind_seg;
+                    ind_seg = leIndice(ind_at);
+                }
+                if(ind_at == ind_cluster_buscado){
+                    if(*ind_cluster_salvo <= 0){
+                        *ind_cluster_salvo = ind_cluster_atual;
+                    }
+                    break;
+                }
+            }
+            else if(obj.tamanho > 0 && obj.extensao[0] == 0){   //Entra na pasta ocupada e segue a busca
+
+                obj = buscaOcupaCluster(ind_cluster_buscado, obj.cluster_inicial, ind_cluster_salvo);
+                if(obj.nome[0] != 0){
+                    if(*ind_cluster_salvo <= 0){
+                        *ind_cluster_salvo = ind_cluster_atual;
+                    }
+                    break;
+                }
+            }
+
+        }
+
+        contador--;
+    }
+
+    return obj;
+}
+
+OBJETO retornaObjetoOcupandoCluster(uint8_t ind_cluster_buscado, uint8_t* ind_cluster_salvo){
+
+    return buscaOcupaCluster(ind_cluster_buscado, 0, ind_cluster_salvo);
+}
+
+int recursaoCalculaTamanhoReservado(uint8_t ind_cluster_pasta){
+
+    FILE* light_fs;
+    OBJETO obj = zeraObjeto();
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
+    int objetos_lidos = 0;
+    int tamanho = 0;
+
+
+    while(contador > 0){
+
+        light_fs = fopen(FILENAME, "rb+");
+        if(light_fs == NULL)
+        {
+            printf("Erro na abertura do arquivo!\n");
+        }
+        else
+        {
+            posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
+            fseek(light_fs, objetos_lidos * sizeof(OBJETO), SEEK_CUR);
+
+            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+
+            objetos_lidos++;
+            fclose(light_fs);
+
+            if(obj.tamanho <= sizeof(CLUSTER) && obj.extensao[0] != 0){ //É um arquivo que ocupa 1 só cluster
+
+                tamanho = tamanho + sizeof(CLUSTER);
+            }
+            else if(obj.tamanho > sizeof(CLUSTER) && obj.extensao[0] != 0){  //É um arquivo que ocupa vários clusters
+
+                tamanho = tamanho + (((obj.tamanho / sizeof(CLUSTER)) + 1) * sizeof(CLUSTER));
+            }
+            else if(obj.nome[0] != 0 && obj.tamanho == 0 && obj.extensao[0] == 0){   //É uma pasta vazia
+
+                tamanho = tamanho + sizeof(CLUSTER);
+            }
+            else if(obj.nome[0] != 0 && obj.tamanho != 0 && obj.extensao[0] == 0){   //É uma pasta ocupada
+
+                tamanho = tamanho + sizeof(CLUSTER) + recursaoCalculaTamanhoReservado(obj.cluster_inicial);
+            }
+
+        }
+
+        contador--;
+    }
+
+    return tamanho;
+}
+
+int calculaTamanhoReservadoDaPasta(uint8_t ind_cluster_pasta){
+
+    return recursaoCalculaTamanhoReservado(ind_cluster_pasta) + sizeof(CLUSTER);
+}
+
+
+//---------------------------------------------------------------------------------
 
 int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta){
 

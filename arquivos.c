@@ -245,6 +245,30 @@ bool checaNomeRepetido(char nome[], uint8_t ind_cluster, FILE* light_fs){
     return false;   //Se chegar até aqui é porque não encontrou um nome repetido
 }
 
+bool objetoExiste(char nome[], uint8_t ind_cluster){
+    //Busca dentro da pasta se existe algum item com o nome informado
+
+    char buffer[54];
+    int contador = sizeof(CLUSTER) / sizeof(OBJETO);
+
+    FILE* light_fs;
+
+    light_fs = fopen(FILENAME, "rb+");
+    if(light_fs == NULL)
+    {
+        printf("Erro na abertura do arquivo!\n");
+    }
+    else
+    {
+        //Checa se já não existe um objeto de mesmo nome
+        if(checaNomeRepetido(nome, ind_cluster, light_fs)){
+            return true;
+        }
+    }
+
+    return false;
+}
+
 int salvaObjetoNaPasta(OBJETO objeto, uint8_t ind_cluster){
     //Retorna 1 se tudo está OK
     //Retorna 0 se já existe um objeto de mesmo nome
@@ -649,41 +673,29 @@ int modificaArquivo(OBJETO arquivo, char novos_dados[], uint8_t ind_cluster_past
     }
 }
 
-int calculaTamanhoDaPasta(uint8_t ind_cluster_pasta){
+int calculaTamanhoDaPasta(uint8_t ind_cluster_pasta, FILE* light_fs){
     //Calcula o tamanho de tudo que está armazenado dentro da pasta atual somando seus tamanhos
 
-    FILE* light_fs;
     OBJETO obj;
     int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
     int tamanho_total = 0;
     int objetos = 0;
 
-    light_fs = fopen(FILENAME, "rb+");
-    if(light_fs == NULL)
-    {
-        printf("Erro na abertura do arquivo!\n");
-    }
-    else
-    {
-        posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
+    posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
 
-        while(contador > 0){
-            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
-            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
-            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
-            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+    while(contador > 0){
+        fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+        fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+        fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+        fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
 
-            if(obj.nome[0] != 0){
-                tamanho_total = tamanho_total + obj.tamanho;
-                objetos++;
-            }
-
-            contador--;
+        if(obj.nome[0] != 0){
+            tamanho_total = tamanho_total + obj.tamanho;
+            objetos++;
         }
 
-        fflush(light_fs);
+        contador--;
     }
-    fclose(light_fs);
 
     return tamanho_total + (objetos * sizeof(OBJETO));
 }
@@ -703,49 +715,35 @@ int tamanhoReservadoEmDisco(){
     return (num_clusters_ocupados * sizeof(CLUSTER)) + sizeof(CLUSTER);
 }
 
-int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pasta){
+int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pasta, FILE* light_fs){
 
-    FILE* light_fs;
     OBJETO obj = zeraObjeto();
     int contador = sizeof(CLUSTER) / sizeof(OBJETO); //Numero máximo de objetos que podem existir em uma pasta
 
-    light_fs = fopen(FILENAME, "rb+");
-    if(light_fs == NULL)
-    {
-        printf("Erro na abertura do arquivo!\n");
-    }
-    else
-    {
-        posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
+    posicionaCursorNoCluster(ind_cluster_pasta, light_fs);
 
-        while(contador > 0){
+    while(contador > 0){
 
-            fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
-            fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
-            fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
-            fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
+        fread(&obj.nome, sizeof(obj.nome), 1, light_fs);
+        fread(&obj.extensao, sizeof(obj.extensao), 1, light_fs);
+        fread(&obj.cluster_inicial, sizeof(obj.cluster_inicial), 1, light_fs);
+        fread(&obj.tamanho, sizeof(obj.tamanho), 1, light_fs);
 
-            if(strcmp(obj.nome, nome) == 0){
-                fseek(light_fs, -1 * sizeof(obj.tamanho), SEEK_CUR);
-                break;
-            }
-
-            contador--;
+        if(strcmp(obj.nome, nome) == 0){
+            fseek(light_fs, -1 * sizeof(obj.tamanho), SEEK_CUR);
+            break;
         }
 
-        fflush(light_fs);
+        contador--;
     }
-
 
     if(contador == 0){
         printf("Item nao encontrado na pasta!\n");
-        fclose(light_fs);
         return 0;
     }
     else{
 
         fwrite(&tam_atualizado, sizeof(obj.tamanho), 1, light_fs);
-        fclose(light_fs);
         return 1;
     }
 }
@@ -783,10 +781,10 @@ void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho){
             indice_pasta_anterior = caminho[i-1].cluster_inicial;
 
             posicionaCursorNoCluster(indice_pasta_atual, light_fs);
-            tamanho = calculaTamanhoDaPasta(indice_pasta_atual);
+            tamanho = calculaTamanhoDaPasta(indice_pasta_atual, light_fs);
 
             posicionaCursorNoCluster(indice_pasta_anterior, light_fs);
-            modificaInfoTamanho(caminho[i].nome, tamanho, indice_pasta_anterior);
+            modificaInfoTamanho(caminho[i].nome, tamanho, indice_pasta_anterior, light_fs);
         }
 
         fflush(light_fs);
@@ -1327,14 +1325,11 @@ int calculaTamanhoReservadoDaPasta(uint8_t ind_cluster_pasta){
     return recursaoCalculaTamanhoReservado(ind_cluster_pasta) + sizeof(CLUSTER);
 }
 
-
-//---------------------------------------------------------------------------------
-
 int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta){
 
     OBJETO pasta;
-    char root[100];
-    char ptr[100];
+    char root[1000];
+    char ptr[1000];
 
     char *ptr_aux = strchr(caminho,'/');
 
@@ -1347,9 +1342,13 @@ int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta){
         strncpy(root, caminho, index);
         root[index] = '\0';
 
-        pasta = retornaObjetoDaPasta(root, ind_cluster_pasta); //le se a pasta do inicio do caminho eh subpasta da pasta
-
-        if(pasta.tamanho==0 && strcmp(root, "Root")==0) pasta.cluster_inicial=0;
+        if(objetoExiste(root, ind_cluster_pasta))
+        {
+            pasta = retornaObjetoDaPasta(root, ind_cluster_pasta);
+        }
+        else
+            if(strcmp(root, "Root")==0) pasta = zeraObjeto();
+            else return -1;
 
         ptr_aux = strchr(ptr,'/');
         index = ptr_aux-ptr;
@@ -1368,20 +1367,25 @@ int retornaClusterCaminho(char *caminho, uint8_t ind_cluster_pasta){
             }
             else strcpy(root, ptr);
 
-            pasta = retornaObjetoDaPasta(root, pasta.cluster_inicial); //le se a pasta do inicio do caminho eh subpasta da pasta
+            pasta = retornaObjetoDaPasta(root, pasta.cluster_inicial);
         }
+
         if(pasta.cluster_inicial==0) return -1;
     }
     else
     {
-        pasta = retornaObjetoDaPasta(caminho, ind_cluster_pasta); //le se a pasta do inicio do caminho eh subpasta da pasta
+        if(strcmp(caminho, "Root") == 0)
+            return 0;
+
+        pasta = retornaObjetoDaPasta(caminho, ind_cluster_pasta);
+
         if(pasta.nome[0]==0)
         {
-            if(strcmp(caminho, "Root") == 0)
-                return 0;
-            else return -1;
+            return -1;
         }
     }
 
 	return pasta.cluster_inicial;
 }
+
+//---------------------------------------------------------------------------------

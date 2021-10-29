@@ -65,48 +65,55 @@ int mkdir(char *name, OBJETO caminho[255], int cur){
 
 int MOVE(char *file, char *path, OBJETO caminho[255], int cur)
 {
-    char dirpath[100];
-    char fileName[100];
-    int folderIn;
-    OBJETO objMove, tmpObj;
+    OBJETO objAux;
+    OBJETO tmpObj;
+    char strPath[1000];
+    char strName[1000];
+    char *strAux = malloc(sizeof(*strAux));
+    int sizeStr;
+    int nFolder;
 
     int folderOut = retornaClusterCaminho(path, caminho[cur].cluster_inicial);
     if(folderOut<0) return 0;
 
-    char *ptr_aux = strrchr(file,'/');
+    strcpy(strPath,file);
+    strcpy(strAux, strtok(file,"/"));
+    strcpy(strName, strAux);
 
-    int index = ptr_aux-file;
+    if (strcmp(strAux, strPath)!=0){
+        while (strAux != NULL){
+            strcpy(strName, strAux);
+            strAux = strtok(NULL,"/");
+        }
+        strPath[strlen(strPath)-strlen(strName)-1] = 0;
+        nFolder = retornaClusterCaminho(strPath, caminho[cur].cluster_inicial);
+        if(nFolder<0) return 0;
 
-    if(index>0)
-    {
-        strncpy(dirpath, file, index);
-        strcpy(fileName, ptr_aux);
-        folderIn = retornaClusterCaminho(dirpath, caminho[cur].cluster_inicial);
-        if(folderIn<0) return 0;
+    }else{
+        strcpy(strPath, "");
+        nFolder = caminho[cur].cluster_inicial;
     }
-    else
-    {
-        strcpy(fileName, file);
-        folderIn = caminho[cur].cluster_inicial;
+
+    objAux = retornaObjetoDaPasta(strName, nFolder);
+    if (strcmp(objAux.nome,"") == 0){
+        return 0;
     }
 
-    tmpObj = retornaObjetoDaPasta(fileName, folderOut);
-    if(tmpObj.tamanho>0) return 0;
-
-    objMove = retornaObjetoDaPasta(fileName, folderIn);
-    if(objMove.tamanho==0) return 0;
+    if(objetoExiste(strName, folderOut)) return 0;
 
     tmpObj = zeraObjeto();
 
-    tmpObj.cluster_inicial = objMove.cluster_inicial;
-    tmpObj.tamanho = objMove.tamanho;
+    tmpObj.cluster_inicial = objAux.cluster_inicial;
+    tmpObj.tamanho = objAux.tamanho;
 
-    strcpy(tmpObj.extensao, objMove.extensao);
-    strcpy(tmpObj.nome, objMove.nome);
+    strcpy(tmpObj.extensao, objAux.extensao);
+    strcpy(tmpObj.nome, objAux.nome);
 
-    removeObjetoDaPasta(fileName, folderIn);
+    removeObjetoDaPasta(strName, nFolder);
 
     salvaObjetoNaPasta(tmpObj, folderOut);
+
+    atualizaTamanhoDasPastas(caminho, cur);
 
     return 1;
 }
@@ -114,8 +121,8 @@ int MOVE(char *file, char *path, OBJETO caminho[255], int cur)
 int RENAME(char *oldname, char *newname, OBJETO caminho[255], int cur)
 {
     OBJETO objAux;
-    char strPath[100];
-    char strName[100];
+    char strPath[1000];
+    char strName[1000];
     char *strAux = malloc(sizeof(*strAux));
     int sizeStr;
     int nFolder;

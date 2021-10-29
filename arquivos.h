@@ -60,9 +60,9 @@ void apagaArquivo(OBJETO arquivo, uint8_t ind_cluster_pasta);
 
 int modificaArquivo(OBJETO arquivo, char novos_dados[], uint8_t ind_cluster_pasta);
 
-int calculaTamanhoDaPasta(uint8_t ind_cluster_pasta);
+int calculaTamanhoDaPasta(uint8_t ind_cluster_pasta, FILE* light_fs);
 
-int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pasta);
+int modificaInfoTamanho(char nome[], int tam_atualizado, uint8_t ind_cluster_pasta, FILE* light_fs);
 
 void atualizaTamanhoDasPastas(OBJETO caminho[], uint8_t tam_caminho);
 
